@@ -1,19 +1,21 @@
 import express from "express";
-import passport from 'passport';
+import passport from "passport";
 import { forwardAuthenticated } from "../middleware/checkAuth";
 
 const router = express.Router();
 
 router.get("/login", forwardAuthenticated, (req, res) => {
   res.render("login");
-})
+});
 
 router.post(
   "/login",
   passport.authenticate("local", {
     successRedirect: "/dashboard",
     failureRedirect: "/auth/login",
-    /* FIX ME: 😭 failureMsg needed when login fails */
+    /* : 😭 failureMsg needed when login fails */
+    failureMessage: true,
+    // failureFlash: true,
   })
 );
 
@@ -23,5 +25,19 @@ router.get("/logout", (req, res) => {
   });
   res.redirect("/auth/login");
 });
+
+router.get(
+  "/auth/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+
+router.get(
+  "/auth/github/callback",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect("/");
+  }
+);
 
 export default router;
