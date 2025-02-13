@@ -1,4 +1,5 @@
-import { userModel } from "../models/userModel";
+import { stringify } from "querystring";
+import { database, userModel } from "../models/userModel";
 
 const getUserByEmailIdAndPassword = (email: string, password: string) => {
   let user = userModel.findOne(email);
@@ -9,6 +10,7 @@ const getUserByEmailIdAndPassword = (email: string, password: string) => {
   }
   return null;
 };
+
 const getUserById = (id: number) => {
   let user = userModel.findById(id);
   if (user) {
@@ -21,4 +23,8 @@ function isUserValid(user: Express.User, password: string) {
   return user.password === password;
 }
 
-export { getUserByEmailIdAndPassword, getUserById };
+function addUserToDatabase(user: Express.User) {
+  return database.push(user);
+}
+
+export { getUserByEmailIdAndPassword, getUserById, addUserToDatabase };

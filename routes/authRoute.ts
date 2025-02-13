@@ -5,7 +5,11 @@ import { forwardAuthenticated } from "../middleware/checkAuth";
 const router = express.Router();
 
 router.get("/login", forwardAuthenticated, (req, res) => {
-  res.render("login");
+  let failMessage = req.session.messages;
+  if (failMessage) {
+    req.session.messages = "";
+  }
+  res.render("login", { messages: failMessage });
 });
 
 router.post(
@@ -27,16 +31,21 @@ router.get("/logout", (req, res) => {
 });
 
 router.get(
-  "/auth/github",
+  "/github",
   passport.authenticate("github", { scope: ["user:email"] })
 );
 
 router.get(
-  "/auth/github/callback",
-  passport.authenticate("github", { failureRedirect: "/login" }),
+  "/github/callback",
+  passport.authenticate("github", {
+    failureRedirect: "/login",
+    successRedirect: "/dashboard",
+    failureMessage: true,
+  }),
+
   function (req, res) {
     // Successful authentication, redirect home.
-    res.redirect("/");
+    res.redirect("/dashboard");
   }
 );
 
