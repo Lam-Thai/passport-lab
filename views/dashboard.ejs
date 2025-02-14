@@ -1,3 +1,11 @@
 <h1 class="mt-4">Dashboard</h1>
 <p class="lead mb-3">Welcome <%= user.name %></p>
+<% if (user.admin === true) {%>
+<p>You are the admin</p>
+<p>Current Active section:</p>
+<p>Session ID: <%= sessionID %></p>
+<p>UserID: <%= user.id %></p>
+<a href="/auth/logout"> Revoke Session</a>
+<% } else { %>
 <a href="/auth/logout" class="btn btn-secondary">Logout</a>
+<% } %>

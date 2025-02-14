@@ -27,3 +27,11 @@ export const forwardAuthenticated = (
   }
   res.redirect("/dashboard");
 };
+
+export const checkAdmin = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user?.admin === false) {
+    res.redirect("/dashboard");
+  }
+
+  next();
+};

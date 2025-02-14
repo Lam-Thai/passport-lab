@@ -34,8 +34,8 @@ const githubStrategy: GitHubStrategy = new GitHubStrategy(
     };
     try {
       addUserToDatabase(newUser);
-      const user = getUserById(newUser.id);
-      done(null, user);
+
+      done(null, newUser);
     } catch (error) {
       if (!profile) {
         done(null, false);
